@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FavoritoDAO {
     public void salvar(Favorito favorito){
-        String sql = "INSERT INTO favorito(type, ref_id,label) VALUES(?,?,?)";
+        String sql = "INSERT INTO favorito(tipo, ref_id,apelido) VALUES(?,?,?)";
         try (Connection conn = Conexao.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)){
 
@@ -26,7 +26,7 @@ public class FavoritoDAO {
 
     public List<Favorito>listarTodos(){
         List<Favorito> lista = new ArrayList<>();
-        String sql = "SELECT * FROM favorito ORDER BY id";
+        String sql = "SELECT id, tipo AS type, ref_id, apelido AS label FROM favorito ORDER BY id";
         try (Connection conn = Conexao.conectar();
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(sql)){

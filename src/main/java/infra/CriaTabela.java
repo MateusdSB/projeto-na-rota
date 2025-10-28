@@ -1,7 +1,6 @@
 package infra;
 
 import java.sql.Connection;
-import java.sql.SQLOutput;
 import java.sql.Statement;
 
 public class CriaTabela {
@@ -9,9 +8,10 @@ public class CriaTabela {
         String sql = """
                 CREATE TABLE IF NOT EXISTS favorito(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    type TEXT NOT NULL, --linha ou parada
-                    refId TEXT NOT NULL, --id da linha ou parada vinda da API
-                    label TEXT
+                    tipo TEXT NOT NULL, --linha ou parada
+                    ref_id TEXT NOT NULL, --id da linha ou parada vinda da API
+                    apelido TEXT,
+                    UNIQUE(tipo,ref_id) 
                 );          
                 """;
         try(Connection conn = Conexao.conectar();
