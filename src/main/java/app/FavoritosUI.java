@@ -63,7 +63,7 @@ public class FavoritosUI extends JFrame {
         }
 
     }
-
+    
     //Método para adcionar um favorito na lista
     private void onAdd(){
         //o tipo de favorito(linha ou parada)
