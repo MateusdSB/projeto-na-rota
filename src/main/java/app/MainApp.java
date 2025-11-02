@@ -22,14 +22,22 @@ public class MainApp extends JFrame{
 
         //janela de cadastrar os favoritos
         JMenu cadastro = new JMenu("Cadastros");
-        JMenu favoritos = new JMenu("Favoritos");
-        favoritos.addActionListener(e ->SwingUtilities.invokeLater(()->new FavoritosUI().setVisible(true)));
+
+        JMenuItem favoritos = new JMenuItem("Favoritos");
+        favoritos.addActionListener(e ->
+           SwingUtilities.invokeLater(() -> {
+                FavoritosUI fav = new FavoritosUI();
+                fav.setLocationRelativeTo(this);
+                fav.setVisible(true);
+           })
+        );
+
         cadastro.add(favoritos);
 
         //janela de conexão com a API
        JMenu api = new JMenu("API");
        JMenuItem buscaLinhas = new JMenuItem("Busca Linhas");
-       buscaLinhas.addActionListener(e ->SwingUtilities.invokeLater(()->e.BuscarLinhasUI().setVisible(true)));
+       buscaLinhas.addActionListener(e ->SwingUtilities.invokeLater(()-> new BuscarLinhasUI().setVisible(true)));
 
        //janela para posições das linhas
        JMenuItem posicoes = new JMenuItem("Posições por Linha(em breve)");

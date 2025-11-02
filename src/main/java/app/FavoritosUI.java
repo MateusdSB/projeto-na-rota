@@ -23,7 +23,7 @@ public class FavoritosUI extends JFrame {
 
     public FavoritosUI(){
         super("NaRota - Favoritos");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(700,400);
         setLocationRelativeTo(null);
 
@@ -33,7 +33,7 @@ public class FavoritosUI extends JFrame {
 
         btnAdcionar.addActionListener(e -> onAdd());
         btnExcluir.addActionListener(e -> onDelete());
-        btnAtualizar.addActionListener(e -> loadData());
+        btnAtualizar.addActionListener(e -> onEdit());
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         top.add(btnAdcionar);
@@ -44,7 +44,8 @@ public class FavoritosUI extends JFrame {
         add(new JScrollPane(tabela),BorderLayout.CENTER);
         loadData();
     }
-    //Método para recarregar a lista
+
+    //Método para atualizar a tabela
     private void loadData(){
         model.setRowCount(0);
         try{
@@ -61,7 +62,6 @@ public class FavoritosUI extends JFrame {
                     "Erro ao carregar: "+ e.getMessage()
             );
         }
-
     }
     
     //Método para adcionar um favorito na lista
@@ -116,16 +116,82 @@ public class FavoritosUI extends JFrame {
                 );
 
                 loadData();
-
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
                         "Erro ao salvar favorito: " + e.getMessage()
                 );
             }
-
         }
-//Metodo para deletar um item da lista
-    }private void onDelete(){
+    }
+
+    //metodo que atualiza um item da tabela de favoritos
+    private void onEdit(){
+        int linha = tabela.getSelectedRow();
+        if(linha < 0){
+            JOptionPane.showMessageDialog(this,
+                    "Selecione um registro para editar");
+            return;
+        }
+
+        int id = (int)model.getValueAt(linha, 0);
+        String tipoAtual = (String) model.getValueAt(linha, 1);
+        String refAtual = (String) model.getValueAt(linha, 2);
+        String apelidoAtual = (String) model.getValueAt(linha, 3);
+
+
+        JTextField campoTipo =  new JTextField(tipoAtual);
+        JTextField campoRefID =  new JTextField(refAtual);
+        JTextField campoApelido =  new JTextField(apelidoAtual);
+
+        Object[] formulario = {
+                "Tipo (Linha/Parada): ", campoTipo,
+                "Ref ID (Código da Linha/Parada): ", campoRefID,
+                "Apelido : ", campoApelido
+        };
+
+        int opcao = JOptionPane.showConfirmDialog(
+                this, formulario,
+                "Editar Favorito (ID " + id + ")",
+                JOptionPane.OK_CANCEL_OPTION
+        );
+
+        if(opcao == JOptionPane.OK_OPTION){
+            String tipo = campoTipo.getText().trim();
+            String refId = campoRefID.getText().trim();
+            String apelido = campoApelido.getText().trim();
+
+            if(tipo.isEmpty() || refId.isEmpty() || apelido.isEmpty()){
+                JOptionPane.showMessageDialog(this,
+                        "Todos os campos devem ser preenchidos.",
+                        "Erro de validação",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            tipo = tipo.toUpperCase();
+            if(!tipo.equals("LINHA") && !tipo.equals("PARADA")){
+                JOptionPane.showMessageDialog(this,
+                        "Tipo deve ser LINHA ou PARADA");
+                return;
+            }
+            try{
+                Favorito fav = new Favorito(tipo,refId,apelido);
+                fav.setId(id);
+
+                dao.atualizar(fav);
+                JOptionPane.showMessageDialog(this,
+                        "Favorito atualizado!");
+                loadData();
+
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(this,
+                        "Erro ao atualizar favorito: " + e.getMessage());
+            }
+        }
+
+    }
+
+    //Metodo para deletar um item da lista
+    private void onDelete(){
         int linha = tabela.getSelectedRow();
         if(linha < 0){
             JOptionPane.showMessageDialog(this,"Selecione um registro");
