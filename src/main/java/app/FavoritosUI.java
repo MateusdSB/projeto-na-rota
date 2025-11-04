@@ -187,7 +187,6 @@ public class FavoritosUI extends JFrame {
                         "Erro ao atualizar favorito: " + e.getMessage());
             }
         }
-
     }
 
     //Metodo para deletar um item da lista
@@ -216,7 +215,11 @@ public class FavoritosUI extends JFrame {
                 JOptionPane.showMessageDialog(this,"Erro ao excluir" + e.getMessage());
             }
         }
+    }
 
+    //recarrega a pagina de favoritos quando seleciona direto da listagem da API
+    public  void reloadTable(){
+        loadData();
     }
 
     public static void main(String[] args) {
