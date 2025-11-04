@@ -4,6 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainApp extends JFrame{
+    private static  FavoritosUI favUI;
+
+    public  static FavoritosUI getFavoritosUI(){
+        return favUI;
+    }
+
     public MainApp(){
         super("NaRota - Home");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,12 +32,13 @@ public class MainApp extends JFrame{
         JMenuItem favoritos = new JMenuItem("Favoritos");
         favoritos.addActionListener(e ->
            SwingUtilities.invokeLater(() -> {
-                FavoritosUI fav = new FavoritosUI();
-                fav.setLocationRelativeTo(this);
-                fav.setVisible(true);
+               if(favUI == null || !favUI.isDisplayable()){
+                   favUI = new FavoritosUI();
+               }
+                favUI.setLocationRelativeTo(this);
+                favUI.setVisible(true);
            })
         );
-
         cadastro.add(favoritos);
 
         //janela de conexão com a API

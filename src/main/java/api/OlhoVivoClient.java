@@ -52,36 +52,6 @@ public class OlhoVivoClient {
         return autenticado;
     }
 
-    /*
-    public boolean autenticar(String token)throws Exception{
-        String url = BASE + "/Login/Autenticar?token=" +
-                URLEncoder.encode(token, StandardCharsets.UTF_8);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .POST(HttpRequest.BodyPublishers.ofString(""))
-                .header("Accept","application/json")
-                .header("User-Agent","JavaHttpClient/NaRota")
-                .build();
-
-        HttpResponse<String> response = http.send(request,HttpResponse.BodyHandlers.ofString());
-        String body = response.body() != null ? response.body().trim() : "";
-
-        System.out.println("=== DEBUG AUTENTICAR ===");
-        System.out.println("URL: " + url);
-        System.out.println("Status: " + response.statusCode());
-        System.out.println("Body: " + body);
-        System.out.println("========================");
-
-        if(response.statusCode()!= 200){
-            throw new RuntimeException("HTTP " + response.statusCode()+ ": " + response.body());
-        }
-
-        autenticado = "true".equalsIgnoreCase(body);
-        return autenticado;
-
-    }*/
-
     //retorna o JSON com o resultado da busca
     public JsonNode buscarLinha(String termosBusca)throws Exception{
         if(!autenticado){

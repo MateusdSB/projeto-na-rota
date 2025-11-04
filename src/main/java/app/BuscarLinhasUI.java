@@ -149,6 +149,12 @@ public class BuscarLinhasUI  extends JFrame {
             Favorito favorito = new Favorito("LINHA", refId,apelido);
             favDAO.salvar(favorito);
             JOptionPane.showMessageDialog(this, "Favorito salvo!");
+            SwingUtilities.invokeLater(()-> {
+                var fav = MainApp.getFavoritosUI();
+                if (fav != null && fav.isDisplayable()) {
+                    fav.reloadTable();
+                }
+            });
         }catch (Exception ex){
             JOptionPane.showMessageDialog(this, "Erro ao salvar favorito: " + ex.getMessage());
         }
