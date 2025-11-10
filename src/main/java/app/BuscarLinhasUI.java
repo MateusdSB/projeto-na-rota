@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class BuscarLinhasUI  extends JFrame {
-    private final OlhoVivoClient client = new OlhoVivoClient();
+    private final OlhoVivoClient client = MainApp.getClient();
     private final FavoritoDAO favDAO = new FavoritoDAO();
 
     private final JTextField textToken = new JTextField();
@@ -47,7 +47,7 @@ public class BuscarLinhasUI  extends JFrame {
 
         //painel de buscar uma linha
         JPanel painelBuscar = new JPanel(new BorderLayout(8,8));
-        painelBuscar.add(new JLabel("Buscar (Código ou nome da linha):"), BorderLayout.WEST);
+        painelBuscar.add(new JLabel("Buscar (Letreiro ou Nome da Linha):"), BorderLayout.WEST);
         painelBuscar.add(textBusca, BorderLayout.CENTER);
         painelBuscar.add(botaoBuscar, BorderLayout.EAST);
 

@@ -2,10 +2,16 @@ package app;
 import infra.ResetaBanco;
 import javax.swing.*;
 import java.awt.*;
+import api.OlhoVivoClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class MainApp extends JFrame{
-    private static  FavoritosUI favUI;
+    private static final OlhoVivoClient client = new OlhoVivoClient();
+    public static  OlhoVivoClient getClient(){
+        return client;
+    }
 
+    private static  FavoritosUI favUI;
     public  static FavoritosUI getFavoritosUI(){
         return favUI;
     }
@@ -47,12 +53,17 @@ public class MainApp extends JFrame{
        buscaLinhas.addActionListener(e ->SwingUtilities.invokeLater(()-> new BuscarLinhasUI().setVisible(true)));
 
        //janela para posições das linhas
-       JMenuItem posicoes = new JMenuItem("Posições por Linha(em breve)");
-       posicoes.addActionListener(e->
-               JOptionPane.showMessageDialog(this,
-                       "Será implementado após buscar linhas"));
+       JMenuItem previsoes = new JMenuItem("Previsões (Linha/Parada)");
+       previsoes.addActionListener(e->
+               SwingUtilities.invokeLater(() ->{
+                   PrevisaoUI telaPrevisao = new PrevisaoUI();
+                   telaPrevisao.setLocationRelativeTo(this);
+                   telaPrevisao.setVisible(true);
+               })
+       );
        api.add(buscaLinhas);
-       api.add(posicoes);
+       api.add(previsoes);
+
 
 
        //ferramenta de depuração - reseta a tabela de favoritos
