@@ -52,7 +52,7 @@ public class OlhoVivoClient {
         return autenticado;
     }
 
-    //retorna o JSON com o resultado da busca
+    //retorna o JSON com o resultado da busca "/Linha/Buscar?termosBusca="
     public JsonNode buscarLinha(String termosBusca)throws Exception{
         if(!autenticado){
             throw new IllegalStateException("Precisa se autenticar primeiro");
@@ -74,5 +74,53 @@ public class OlhoVivoClient {
 
         return M.readTree(response.body());
     }
+
+    //previsões de chegada linha(onibus) /Previsao/Linha?codigoLinha={cl}
+    public JsonNode previsaoPorLinha(String codigoLinha)throws Exception{
+        if(!autenticado){
+            throw new IllegalStateException("Precisa se autenticar primeiro");
+        }
+
+        String url = BASE +"/Previsao/Linha?codigoLinha=" +
+                URLEncoder.encode(codigoLinha, StandardCharsets.UTF_8);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .header("Accept","application/json")
+                .build();
+
+        HttpResponse<String> response = http.send(request,HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode()!= 200){
+            throw new RuntimeException("HTTP " + response.statusCode()+": " + response.body());
+        }
+
+        return M.readTree(response.body());
+    }
+
+    //previsões de chegada parada /Previsao/Parada?codigoParada={cl}
+    public JsonNode previsaoPorParada(String codigoParada)throws Exception{
+        if(!autenticado){
+            throw new IllegalStateException("Precisa se autenticar primeiro");
+        }
+
+        String url = BASE +"/Previsao/Parada?codigoParada=" +
+                URLEncoder.encode(codigoParada, StandardCharsets.UTF_8);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .header("Accept","application/json")
+                .build();
+
+        HttpResponse<String> response = http.send(request,HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode()!= 200){
+            throw new RuntimeException("HTTP " + response.statusCode()+": " + response.body());
+        }
+
+        return M.readTree(response.body());
+    }
+
+
 
 }
