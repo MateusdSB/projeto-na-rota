@@ -17,7 +17,7 @@ public class CriaTabela {
         // ===== Importar stops.txt se a tabela 'parada' estiver vazia =====
         try {
             if (tabelaParadaVazia()) {
-                // 1) se foi passado argumento, usa
+
                 String caminho = (args != null && args.length > 0 && args[0] != null && !args[0].isBlank())
                         ? args[0]
                         : localizarStopsPadrao(); // 2) caso contrário, tenta achar automático

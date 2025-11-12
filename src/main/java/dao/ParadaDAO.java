@@ -43,7 +43,7 @@ public class ParadaDAO {
 
                     String[] cols = csvSplit(linha, sep);
                     int need = Math.max(Math.max(idxId, idxName), Math.max(idxLat, idxLon));
-                    if (cols.length <= need) continue; // linha curta
+                    if (cols.length <= need) continue;
 
                     String paradaId   = stripQuotes(cols[idxId]);
                     String paradaName = stripQuotes(cols[idxName]);
@@ -57,7 +57,7 @@ public class ParadaDAO {
                         paradaLat = Double.parseDouble(sLat);
                         paradaLon = Double.parseDouble(sLon);
                     } catch (NumberFormatException nfe) {
-                        continue; // pula linha ruim
+                        continue;
                     }
 
                     ps.setString(1, paradaId);
@@ -173,6 +173,23 @@ public class ParadaDAO {
             throw new RuntimeException("Erro ao buscar parada próxima: " + e.getMessage(), e);
         }
         return  melhor;
+    }
+
+    public String buscarNomePorId(String paradaId) {
+        String sql = "SELECT parada_name FROM parada WHERE parada_id = ? LIMIT 1";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, paradaId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString(1);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar nome da parada: " + e.getMessage(), e);
+        }
+        return "";
     }
 
     public static double haversineMeters(double lat1, double lon1, double lat2, double lon2){

@@ -34,7 +34,7 @@ public class PrevisaoUI extends JFrame {
 
     // Tabela: previsões por PARADA (mostra ônibus por linha chegando nessa parada)
     private final DefaultTableModel modeloPorParada = new DefaultTableModel(
-            new Object[]{"Código Linha", "Letreiro", "Sentido", "Prefixo", "Previsão", "Acessível?", "Lat", "Lon"}, 0) {
+            new Object[]{"Código Linha", "Letreiro", "Sentido", "Prefixo do Ônibus", "Previsão", "Acessível?", "Lat", "Lon"}, 0) {
         @Override public boolean isCellEditable(int r, int c) { return false; }
     };
     private final JTable tabelaPorParada = new JTable(modeloPorParada);
@@ -158,6 +158,14 @@ public class PrevisaoUI extends JFrame {
                         String nomeParada   = parada.path("np").asText("");
                         Double pyParada     = parada.hasNonNull("py") ? parada.get("py").asDouble() : null;
                         Double pxParada     = parada.hasNonNull("px") ? parada.get("px").asDouble() : null;
+
+                        if (nomeParada == null || nomeParada.isBlank()) {
+                            try {
+                                nomeParada = paradaDAO.buscarNomePorId(codigoParada);
+                            } catch (Exception ignore) {
+                                // se der erro, mantém vazio
+                            }
+                        }
 
                         if (parada.has("vs") && parada.get("vs").isArray()) {
                             for (JsonNode v : parada.get("vs")) {
@@ -318,7 +326,7 @@ public class PrevisaoUI extends JFrame {
         }.execute();
     }
 
-    // ===== Utilitários =====
+
     private static void limpaTabela(DefaultTableModel model) {
         model.setRowCount(0);
     }
@@ -327,12 +335,12 @@ public class PrevisaoUI extends JFrame {
     public static String toHoraLocal(String isoUtcOrHour, String hrBaseUtc) {
         if (isoUtcOrHour == null || isoUtcOrHour.isBlank()) return "";
         try {
-            // Caso 1: campo "t" veio como ISO UTC
+
             Instant instant = Instant.parse(isoUtcOrHour);
             return HORA_MIN.format(LocalDateTime.ofInstant(instant, ZONA_SP).toLocalTime());
         } catch (Exception ignore) {
             try {
-                // Caso 2: campo "t" veio como "HH:mm" (usa "hr" como base)
+
                 if (hrBaseUtc == null) return isoUtcOrHour;
                 LocalTime horaLocal = LocalTime.parse(isoUtcOrHour);
                 Instant base = Instant.parse(hrBaseUtc);
@@ -340,7 +348,7 @@ public class PrevisaoUI extends JFrame {
                         .withHour(horaLocal.getHour()).withMinute(horaLocal.getMinute());
                 return HORA_MIN.format(zona.toLocalTime());
             } catch (Exception e) {
-                // Se nada der certo, retorna como veio
+
                 return isoUtcOrHour;
             }
         }
